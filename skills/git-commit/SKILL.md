@@ -87,19 +87,19 @@ The scope is optional.
 
 Supported types:
 
-| Type       | Usage                                        |
-| ---------- | -------------------------------------------- |
-| `feat`     | New functionality                            |
-| `fix`      | Bug fixes                                    |
-| `docs`     | Documentation changes                        |
-| `style`    | Formatting and code style changes            |
+| Type | Usage |
+| --- | --- |
+| `feat` | New functionality |
+| `fix` | Bug fixes |
+| `docs` | Documentation changes |
+| `style` | Formatting and code style changes |
 | `refactor` | Code restructuring without changing behavior |
-| `perf`     | Performance improvements                     |
-| `test`     | Adding or updating tests                     |
-| `build`    | Build system and dependency changes          |
-| `ci`       | CI/CD configuration changes                  |
-| `chore`    | Maintenance and miscellaneous tasks          |
-| `revert`   | Reverting previous changes                   |
+| `perf` | Performance improvements |
+| `test` | Adding or updating tests |
+| `build` | Build system and dependency changes |
+| `ci` | CI/CD configuration changes |
+| `chore` | Maintenance and miscellaneous tasks |
+| `revert` | Reverting previous changes |
 
 **Message guidelines:**
 

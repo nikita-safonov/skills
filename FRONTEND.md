@@ -2,18 +2,20 @@
 
 ## Main
 
-The core set for comprehensive frontend development. Each skill has a distinct responsibility: design, interaction quality, React architecture, and technical auditing.
+The core set for comprehensive frontend development. Each skill has a distinct responsibility: design, interaction
+quality, React architecture, and technical auditing.
 
 | Skill | Description |
 | --- | --- |
 | [`impeccable`](https://github.com/pbakaus/impeccable) | **Design and UX.** The primary tool for designing and improving interfaces. Covers visual direction, composition, typography, color, responsiveness, UX, accessibility, and final polish. |
-| [`emil-design-eng`](https://github.com/emilkowalski/skills) | **Design Engineering.** Focuses on implementation quality and attention to detail: micro-animations, transitions, interactivity, visual precision, and the overall feel of using the product. The repository also includes specialized skills `animate`, `review-animations`, `choreograph`, `break-ui` and others. |
+| [`emil-design-eng`](https://github.com/emilkowalski/skills) | **Design Engineering.** The complete skill suite for implementation quality, micro-animations, transitions, interactivity, and visual precision. When installing this Main entry, install the entire suite from the linked repository, including `emil-design-eng`, `animate`, `review-animations`, `choreograph`, `break-ui`, and all other skill modules it provides. These modules are part of the core installation. |
 | [`vercel-composition-patterns`](https://github.com/vercel-labs/agent-skills/tree/main/skills/composition-patterns) | **React architecture.** Helps build scalable, reusable components, apply Compound Components, organize state correctly, and avoid excessive boolean props. |
 | [`react-doctor`](https://github.com/millionco/react-doctor) | **Quality assurance.** Automatically audits React applications for performance, security, correctness, accessibility, and architecture. Identifies issues, suggests fixes, and rates project health on a scale of 0–100. |
 
 ## Alternatives
 
-Backup and specialized options. These do not need to be installed alongside the core set. Add them when needed or use them as alternatives to the corresponding skills in Main.
+Backup and specialized options. These do not need to be installed alongside the core set. Add them when needed or use
+them as alternatives to the corresponding skills in Main.
 
 | Skill | Description |
 | --- | --- |

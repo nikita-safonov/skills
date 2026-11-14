@@ -74,14 +74,14 @@ First, inspect existing branch names and repository documentation to identify na
 
 If no convention exists, use these prefixes:
 
-| Prefix      | Usage                   |
-| ----------- | ----------------------- |
-| `feat/`     | New functionality       |
-| `fix/`      | Bug fixes               |
-| `refactor/` | Code restructuring      |
-| `chore/`    | Maintenance tasks       |
-| `docs/`     | Documentation changes   |
-| `test/`     | Testing-related changes |
+| Prefix | Usage |
+| --- | --- |
+| `feat/` | New functionality |
+| `fix/` | Bug fixes |
+| `refactor/` | Code restructuring |
+| `chore/` | Maintenance tasks |
+| `docs/` | Documentation changes |
+| `test/` | Testing-related changes |
 
 **Naming guidelines:**
 

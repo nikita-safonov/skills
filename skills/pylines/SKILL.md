@@ -22,14 +22,14 @@ Load only the guides needed for the current task. Read the applicable rule toget
 For the longer SOLID guide, use its table of contents to select a principle. If the applicable rule is unclear, expand
 the reading before making a recommendation.
 
-| Topic                                                         | Guide                            |
-| ------------------------------------------------------------- | -------------------------------- |
-| Code style, typing, naming, immutability, exceptions, imports | [code-style.md](code-style.md)   |
-| REST API, URL conventions, versioning                         | [rest.md](rest.md)               |
-| Testing: AAA, parametrization, Faker/Hypothesis, pytest-xdist | [tests.md](tests.md)             |
-| SOLID principles with examples                                | [solid.md](solid.md)             |
-| Recommended libraries and tools                               | [our-stack.md](our-stack.md)     |
-| Ruff and ty configuration                                     | [pyproject.toml](pyproject.toml) |
+| Topic | Guide |
+| --- | --- |
+| Code style, typing, naming, immutability, exceptions, imports | [code-style.md](code-style.md) |
+| REST API, URL conventions, versioning | [rest.md](rest.md) |
+| Testing: AAA, parametrization, Faker/Hypothesis, pytest-xdist | [tests.md](tests.md) |
+| SOLID principles with examples | [solid.md](solid.md) |
+| Recommended libraries and tools | [our-stack.md](our-stack.md) |
+| Ruff and ty configuration | [pyproject.toml](pyproject.toml) |
 
 Keep detailed rules in their guides rather than relying on a separate summary that can omit exceptions. In reviews, cite
 the relevant guide and distinguish a pylines convention from a requirement already adopted by the repository.
