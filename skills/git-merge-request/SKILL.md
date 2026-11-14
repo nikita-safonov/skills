@@ -1,156 +1,108 @@
 ---
 name: git-merge-request
 description: >-
-  Prepare a merge request from the current Git branch. Use when asked to create,
-  prepare, or submit a merge request. Analyzes commits and code changes,
-  generates a clear title and description, pushes the source branch, and
-  provides the prepared merge request details.
+  Prepare a pull or merge request from a working branch by reviewing its commits and diff and writing an English title
+  and description. Use when asked to draft, prepare, create, or submit a pull or merge request. Publish the branch or
+  request only when the user's instructions authorize that action.
 ---
 
 # Git Merge Request
 
-## Purpose
+## Choose the requested outcome
 
-Prepare a high-quality merge request based on the current repository state, commit history, and code changes.
+- For a draft title, description, or preparation-only request, perform read-only analysis and return the content.
+- When asked to push the branch, publish it after reviewing the changes.
+- When asked to create or submit the request, push the branch if needed and create the request through the hosting
+  platform's available tools. A request to create a draft on the hosting platform also authorizes publication as a
+  draft.
+- Respect instructions such as "do not push" or "do not create the request". Existing authorization is sufficient; do
+  not ask the user to approve the same action again.
 
-The workflow includes:
-- Validating the current Git branch.
-- Analyzing commits and code changes.
-- Generating a meaningful merge request title and description.
-- Pushing the source branch to the remote repository.
-- Providing the prepared merge request details to the user.
+## Resolve the branches
 
-## Arguments
+Accept an optional `target_branch`; otherwise determine the target from the repository's documented workflow or hosting
+platform's default-branch metadata. Resolve the intended remote (`origin` when appropriate) before querying its symbolic
+HEAD, which is another available source:
 
-- `target_branch` (optional): Target branch for the merge request. Defaults to `master`.
+```bash
+git symbolic-ref --quiet --short "refs/remotes/<remote>/HEAD"
+```
 
-## Workflow
+If the available sources conflict or do not identify the target, ask the user. Do not guess `main` or `master`.
 
-### 1. Inspect the Repository
-
-Determine the source branch:
+Inspect the source branch, repository status, and remotes:
 
 ```bash
 git branch --show-current
+git status --short
+git remote -v
 ```
 
-**Safety checks:**
+- Require a working branch distinct from the target. If HEAD is detached or the source is the repository's default
+  branch, ask the user to select a working branch.
+- Use `origin` when it is the intended remote; resolve a missing or ambiguous remote from the user's instructions and
+  repository workflow.
+- Report uncommitted changes as excluded from the request. Do not stage, commit, discard, or stash them.
+- Stop on an unfinished merge, rebase, cherry-pick, or revert, or unresolved conflicts.
 
-- If the current branch is `master`, stop immediately and ask the user to switch to a working branch.
-- If the source branch matches the target branch, stop.
-- If the repository has uncommitted changes, inform the user. Do not stage, commit, or discard changes automatically.
-- Verify that the `origin` remote exists.
-
-Determine the target branch:
-- Use the provided `target_branch` argument if available.
-- Otherwise, default to `master`.
-
-Fetch the latest target branch:
+Fetch the selected target and verify its remote-tracking ref before comparing. Substitute the resolved remote and branch
+names for these placeholders:
 
 ```bash
-git fetch origin <target_branch>
+git fetch "<remote>" "<target_branch>"
+git rev-parse --verify "refs/remotes/<remote>/<target_branch>"
 ```
 
-Verify that the target branch exists.
+If the target cannot be fetched or verified, report the error instead of silently comparing against another branch.
 
-### 2. Analyze Changes
-
-Retrieve commits between the target and source branches:
+## Review and write
 
 ```bash
-git log origin/<target_branch>..HEAD --oneline
+git log "<remote>/<target_branch>..HEAD" --oneline
+git diff "<remote>/<target_branch>...HEAD" --stat
+git diff "<remote>/<target_branch>...HEAD"
 ```
 
-Inspect the complete changeset:
+Read the actual diff as well as the commits. If there are no commits ahead of the target or the diff is empty, report
+that there is no changeset to submit.
 
-```bash
-git diff origin/<target_branch>...HEAD --stat
-git diff origin/<target_branch>...HEAD
-```
-
-Analyze the changes and identify:
-- Main purpose of the changes.
-- New functionality.
-- Bug fixes.
-- Refactoring and architectural changes.
-- Breaking changes.
-- Relevant implementation details.
-
-Do not rely exclusively on commit messages. Inspect the actual code changes.
-
-If there are no commits ahead of the target branch, stop and inform the user.
-
-### 3. Generate Merge Request Content
-
-Generate a concise, informative title describing the primary change.
-
-Use imperative wording where appropriate. Do not include issue identifiers or ticket prefixes.
-
-The description must be written in English and formatted as Markdown.
-
-Use the following structure:
+Write the title and description in English. Follow the repository's request template when present. Otherwise use the
+sections below, keeping the detail proportional to the changes:
 
 ```markdown
 ## Summary
 
-- Describe the main changes.
-- Highlight important implementation details.
+Describe the resulting behavior and important implementation details.
 
 ## Motivation
 
-Explain why these changes are needed and what problem they solve.
+Explain the problem the changes address.
 
 ## Testing
 
-- Describe tests that were actually executed.
-- Include relevant manual verification steps.
-- Explicitly mention if tests were not run.
+List checks actually performed and their results, or state that tests were not run.
 ```
 
-**Writing guidelines:**
+Do not invent requirements, motivations, issue identifiers, or test results. Preserve issue references supplied by the
+user or required by the repository's workflow.
 
-- Focus on meaningful changes rather than listing every modified file.
-- Be specific and technically accurate.
-- Avoid unnecessary implementation details.
-- Do not invent requirements, motivations, or test results.
-- Keep the description proportional to the scope of changes.
+## Publish when authorized
 
-### 4. Push the Source Branch
+For preparation-only requests, skip this section and return the title and description.
 
-Push the current branch to the remote repository:
+Before publication, verify that the source branch and reviewed commit have not changed. Push only the source branch to
+the intended remote:
 
 ```bash
-git push --set-upstream origin <source_branch>
+git push --set-upstream "<remote>" "<source_branch>"
 ```
 
-If the push fails:
-- Inspect the error.
-- Do not force-push.
-- Do not rewrite commit history.
-- Report the problem and let the user decide how to proceed.
+Do not force-push, rewrite history, create commits, or push directly to the target. If the push fails, report the error
+and stop publication; do not overwrite remote work.
 
-Do not create commits or modify the existing commit history.
+When creation or submission was requested, use the hosting platform's tools to create the request with the reviewed
+source, target, title, description, and requested draft status. Check for an existing request before creating a
+duplicate. If creation tools are unavailable, provide the prepared content and explain what remains to be done.
 
-### 5. Report Results
-
-Provide the user with:
-
-1. Merge request title.
-2. Source and target branches.
-3. Complete Markdown description.
-4. Push status.
-5. Any relevant warnings or issues.
-
-The merge request itself must be created through the repository hosting platform. Do not claim that it was created if only the branch was pushed.
-
-## Constraints
-
-- Never use `master` as the source branch.
-- Never push directly to the target branch.
-- Never force-push.
-- Never create commits automatically.
-- Never stage, discard, or modify unrelated user changes.
-- Never invent information about the changes or test results.
-- Do not attempt to resolve unrelated repository issues.
-- If critical information is missing, ask the user before proceeding.
-- Stop when a safety check fails and return control to the user.
+Report source and target branches, the prepared content, and publication status. Include a request URL only after
+confirming that the request exists. Distinguish content preparation, branch push, and request creation in the result.

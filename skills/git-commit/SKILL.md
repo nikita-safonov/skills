@@ -1,19 +1,20 @@
 ---
 name: git-commit
 description: >-
-  Use when the user asks to commit changes in a Git repository.
-  Inspects staged, unstaged, and untracked changes, analyzes the diff,
-  generates an accurate Conventional Commit message in English,
-  stages the intended changes, and creates the commit.
+  Use when the user asks to commit changes in a Git repository. Inspects staged, unstaged, and untracked changes,
+  analyzes the diff, generates an accurate Conventional Commit message in English, stages the intended changes, and
+  creates the commit.
 ---
 
 # Git Commit
 
 ## Purpose
 
-Analyze the current Git repository, prepare a meaningful commit message, and create a Git commit containing the intended changes.
+Analyze the current Git repository, prepare a meaningful commit message, and create a Git commit containing the intended
+changes.
 
 The workflow includes:
+
 - Inspecting repository status and pending changes.
 - Reviewing staged, unstaged, and untracked files.
 - Understanding what changed and why.
@@ -50,7 +51,8 @@ Review untracked files separately. Inspect their contents when necessary.
 **Safety checks:**
 
 - If the repository has no changes, inform the user and stop.
-- Identify potentially sensitive files, including `.env`, credentials, private keys, and tokens. Never stage them automatically.
+- Identify potentially sensitive files, including `.env`, credentials, private keys, and tokens. Never stage them
+  automatically.
 - Do not include ignored files, generated artifacts, dependencies, or unrelated changes.
 - If existing staged changes appear unrelated to the requested work, ask the user before proceeding.
 - If the intended commit scope is unclear, ask the user for clarification.
@@ -60,6 +62,7 @@ Review untracked files separately. Inspect their contents when necessary.
 Understand the complete changeset before generating the commit message.
 
 Identify:
+
 - The primary purpose of the changes.
 - New functionality.
 - Bug fixes.
@@ -84,19 +87,19 @@ The scope is optional.
 
 Supported types:
 
-| Type | Usage |
-| --- | --- |
-| `feat` | New functionality |
-| `fix` | Bug fixes |
-| `docs` | Documentation changes |
-| `style` | Formatting and code style changes |
+| Type       | Usage                                        |
+| ---------- | -------------------------------------------- |
+| `feat`     | New functionality                            |
+| `fix`      | Bug fixes                                    |
+| `docs`     | Documentation changes                        |
+| `style`    | Formatting and code style changes            |
 | `refactor` | Code restructuring without changing behavior |
-| `perf` | Performance improvements |
-| `test` | Adding or updating tests |
-| `build` | Build system and dependency changes |
-| `ci` | CI/CD configuration changes |
-| `chore` | Maintenance and miscellaneous tasks |
-| `revert` | Reverting previous changes |
+| `perf`     | Performance improvements                     |
+| `test`     | Adding or updating tests                     |
+| `build`    | Build system and dependency changes          |
+| `ci`       | CI/CD configuration changes                  |
+| `chore`    | Maintenance and miscellaneous tasks          |
+| `revert`   | Reverting previous changes                   |
 
 **Message guidelines:**
 
@@ -124,13 +127,17 @@ For larger changes, add a commit body explaining the motivation and important im
 
 After reviewing the changes and confirming that their scope is appropriate:
 
-Stage the intended files:
+Stage only the reviewed paths that belong to the requested commit. Pass each path as a separate, quoted argument:
 
 ```bash
-git add -A
+git add -- "<reviewed-path-1>" "<reviewed-path-2>"
 ```
 
-Before committing, verify the staged changes:
+If a file contains both intended and unrelated changes, stage only the intended hunks. Do not stage the entire file or
+use a repository-wide add command. Preserve existing staged and unstaged work; if the intended changes cannot be
+isolated safely, ask the user to clarify the scope.
+
+Before committing, verify the complete staged changeset, including anything that was staged before this workflow:
 
 ```bash
 git diff --cached --stat
@@ -163,12 +170,14 @@ git status --short
 ```
 
 Report to the user:
+
 - Commit hash.
 - Complete commit message.
 - Summary of committed changes.
 - Remaining uncommitted changes, if any.
 
 If the commit fails:
+
 - Show the relevant error.
 - Do not attempt unrelated fixes.
 - Do not bypass Git hooks or commit validation.

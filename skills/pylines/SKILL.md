@@ -1,48 +1,35 @@
 ---
 name: pylines
-description: >
-  Development guidelines from the pylines project (community-of-python/pylines) — Python backend. Use whenever writing, reviewing, or refactoring code in
-  backend work with FastAPI, Litestar, SQLAlchemy.
-  Trigger on any code generation, code review, architecture discussion, REST API design, test
-  writing, or when the user mentions "pylines", "code style", "наши гайдлайны", "guidelines", or
-  asks to follow team conventions. Also trigger when writing pyproject.toml configs for ruff,
-  designing class hierarchies, discussing SOLID, or structuring a project.
+description: >-
+  Apply pylines conventions when writing, reviewing, or refactoring Python backend code and configuring Ruff or ty.
 ---
 
-# Guidelines (pylines) — live from GitHub
+# Guidelines (pylines)
 
-## Step 1 — read the relevant guide
+## Scope and precedence
 
-Pick the file from the table below, then:
+Use these guides for Python backend work. Follow the user's instructions and the target repository's documented
+conventions first. Apply pylines where those leave a choice; do not replace an established framework or rewrite
+unrelated code just to match the recommended stack.
 
-- **Every guide except `solid.md`: read it whole.** They run 3–245 lines; a partial read cuts a
-  rule away from the ❌/✅ example that defines it, which is worse than reading the extra lines.
-- **`solid.md` (703 lines): read `index.md` first.** `sync.sh` regenerates it on every run — it
-  lists each guide's headings with line numbers, so you can read just the principle you need
-  (SRP, OCP, LSP, ISP, DIP are ~100 lines each) instead of the whole file.
+The bundled [pyproject.toml](pyproject.toml) is the reference for Ruff and ty settings. When adopting this
+configuration, use its actual selections and overrides rather than enabling all lint rules or introducing a different
+type checker. Distinguish tool-enforced checks from additional coding conventions described in the guides.
 
-If you cannot find a rule, say so and read the guide whole. Never answer from memory about what
-these guides say — that is exactly what the cache exists to prevent.
+## Read the relevant guide
 
-| Тема | Файл |
-|------|------|
-| Python: стиль, типизация, именование, иммутабельность, исключения, импорты | `code-style.md` |
-| Python: REST API, URL conventions, версионирование | `rest.md` |
-| Python: тесты — AAA, parametrize, faker/hypothesis, pytest-xdist | `tests.md` |
-| Python: SOLID с примерами | `solid.md` |
-| Python: рекомендуемые библиотеки и инструменты | `our-stack.md` |
-| Python: архитектура | `architecture-guide.md` |
-| Python: эталонный ruff конфиг | `pyproject.toml` |
+Load only the guides needed for the current task. Read the applicable rule together with its examples and exceptions.
+For the longer SOLID guide, use its table of contents to select a principle. If the applicable rule is unclear, expand
+the reading before making a recommendation.
 
-## Minimal always-on rules (details in the cached guides)
+| Topic                                                         | Guide                            |
+| ------------------------------------------------------------- | -------------------------------- |
+| Code style, typing, naming, immutability, exceptions, imports | [code-style.md](code-style.md)   |
+| REST API, URL conventions, versioning                         | [rest.md](rest.md)               |
+| Testing: AAA, parametrization, Faker/Hypothesis, pytest-xdist | [tests.md](tests.md)             |
+| SOLID principles with examples                                | [solid.md](solid.md)             |
+| Recommended libraries and tools                               | [our-stack.md](our-stack.md)     |
+| Ruff and ty configuration                                     | [pyproject.toml](pyproject.toml) |
 
-Python:
-
-- Tooling: **ruff**, **uv**, line length **120**, server **granian**.
-- Typing: 100% annotations, `typing.Final` on vars, `@typing.final` on classes, narrow types (Literal/TypedDict).
-- Naming: verbs for functions, no `get` prefix (use fetch/build/parse…), names ≥ 8 chars, semantic.
-- Classes: composition over inheritance; `@dataclass(kw_only=True, slots=True, frozen=True)`; `typing.Protocol` for interfaces.
-- Exceptions: catch concrete types, LBYL over EAFP, narrow try-blocks, no custom exception classes — raise framework/stdlib ones.
-- Resilience: retry anything leaving RAM (SQL/HTTP/files) via **stamina**.
-
-Applies to both: read the matching cached guide before quoting specifics — these lists are pointers, not the standard.
+Keep detailed rules in their guides rather than relying on a separate summary that can omit exceptions. In reviews, cite
+the relevant guide and distinguish a pylines convention from a requirement already adopted by the repository.

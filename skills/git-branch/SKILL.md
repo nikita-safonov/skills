@@ -1,9 +1,8 @@
 ---
 name: git-branch
 description: >-
-  Use when the user asks to create a new Git branch.
-  Analyzes repository conventions, determines the appropriate branch name
-  and base branch, validates the branch, creates it, and verifies the result.
+  Use when the user asks to create a new Git branch. Analyzes repository conventions, determines the appropriate branch
+  name and base branch, validates the branch, creates it, and verifies the result.
 ---
 
 # Git Branch
@@ -13,6 +12,7 @@ description: >-
 Create a new Git branch following the repository's existing naming conventions and Git workflow.
 
 The workflow includes:
+
 - Inspecting the current repository state.
 - Determining the source (base) branch.
 - Generating or validating the new branch name.
@@ -22,7 +22,8 @@ The workflow includes:
 
 ## Arguments
 
-- `branch_name` (optional): Name of the new branch. If omitted, generate a descriptive name based on the user's task and repository conventions.
+- `branch_name` (optional): Name of the new branch. If omitted, generate a descriptive name based on the user's task and
+  repository conventions.
 - `base_branch` (optional): Branch from which the new branch should be created. Defaults to the current branch.
 
 ## Workflow
@@ -58,7 +59,8 @@ git remote -v
 
 - Verify that the current directory is a Git repository.
 - If a merge, rebase, cherry-pick, or revert operation is in progress, stop and inform the user.
-- If there are uncommitted changes, inform the user before switching branches. Never commit, stash, discard, or overwrite changes automatically.
+- If there are uncommitted changes, inform the user before switching branches. Never commit, stash, discard, or
+  overwrite changes automatically.
 - If the repository has no commits, stop and inform the user.
 - Do not modify Git configuration or repository settings.
 
@@ -72,14 +74,14 @@ First, inspect existing branch names and repository documentation to identify na
 
 If no convention exists, use these prefixes:
 
-| Prefix | Usage |
-| --- | --- |
-| `feat/` | New functionality |
-| `fix/` | Bug fixes |
-| `refactor/` | Code restructuring |
-| `chore/` | Maintenance tasks |
-| `docs/` | Documentation changes |
-| `test/` | Testing-related changes |
+| Prefix      | Usage                   |
+| ----------- | ----------------------- |
+| `feat/`     | New functionality       |
+| `fix/`      | Bug fixes               |
+| `refactor/` | Code restructuring      |
+| `chore/`    | Maintenance tasks       |
+| `docs/`     | Documentation changes   |
+| `test/`     | Testing-related changes |
 
 **Naming guidelines:**
 
@@ -148,6 +150,7 @@ Never delete or rename existing branches automatically.
 ### 5. Create Branch
 
 Before creation, confirm that:
+
 - The branch name is valid.
 - The base branch exists.
 - No conflicting branch exists.
@@ -186,12 +189,14 @@ git status --short
 ```
 
 After successful creation, report:
+
 - New branch name.
 - Base branch.
 - Confirmation that the branch was created and checked out.
 - Any remaining uncommitted changes.
 
 If branch creation fails:
+
 - Report the relevant Git error.
 - Do not attempt unrelated fixes.
 - Do not delete or modify existing branches.
